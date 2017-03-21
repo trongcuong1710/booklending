@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   get '/', to: 'authenticates#index'
   post '/login', to: 'authenticates#login'
   get '/books', to: 'books#index'
+  get '/logout', to: 'authenticates#logout'
 end
