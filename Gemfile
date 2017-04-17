@@ -36,6 +36,8 @@ gem 'bootstrap_sb_admin_base_v2'
 gem 'pg'
 gem 'kaminari'
 gem 'bootstrap-kaminari-views'
+gem 'bcrypt'
+gem 'virtus'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

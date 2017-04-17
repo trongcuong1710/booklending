@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  include SessionsHelper
 
   ApplicationNotAuthenticated = Class.new(StandardError)
 
@@ -15,7 +16,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from ActionController::ParameterMissing do |exception|
+    respond_to do |format|
+      format.html do
+        flash[:error] = "Missing required paramter: #{exception.param}"
+        redirect_back(fallback_location: '/')
+      end
+    end
+  end
+
   def admin_authentication_required!
-    session[:current_user] || raise(ApplicationNotAuthenticated)
+    current_user || raise(ApplicationNotAuthenticated)
   end
 end

@@ -1,36 +1,35 @@
 class AuthenticatesController < ApplicationController
 	def index 
-		unless session[:current_user]
-			render :layout => false
-			return
-		end
+		return render :layout => false unless current_user
 
 		redirect_to "/books"
 	end
 
 	def login
-		email = params[:email]
-		password = params[:password]
+		@login_model = LoginModel.new(params[:login_model])
 
-		service = AuthenticationService.new
-
-		if service.is_authenticate?(email, password)
-			session[:current_user] = true
-
-			unless session[:redirect]
-				redirect_to '/books'
-			else
-				redirect_to session[:redirect]
-				session[:redirect] = nil
+		authenticate_service.authenticate(@login_model) do |errors, user|
+			unless user
+				flash.now[:errors] = errors
+				return render "index", :layout => false	
 			end
-		else
-			flash[:error] = "Invalid user name or password"
-			redirect_to '/'
+
+			session[:current_user_id] = user.id
+			redirect_to '/books'
 		end
 	end
 
 	def logout
-		session[:current_user] = nil
+		session[:current_user_id] = nil
 		redirect_to '/'	
+	end
+
+	private
+	def authenticate_service
+		@service ||= AuthenticationService.new
+	end
+
+	def login_params
+		params.require(:login_model).permit(:email, :password)
 	end
 end

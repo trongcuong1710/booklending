@@ -1,9 +1,15 @@
 class AuthenticationService 
-	def is_authenticate?(email, password)
-		if email == "hoanglong@siliconstraits.com" && password == "12345678"
-			return true
-		else
-			return false
+	def authenticate(login_model)
+		unless login_model.valid?
+			yield(login_model.errors.full_messages, nil)
 		end
+
+		user = User.find_by(email: login_model.email)
+		
+		unless user && user.authenticate(login_model.password)
+			yield(["Login Failed! Invalid email or password"], nil)
+		end
+
+		yield(nil, user)
 	end
 end
