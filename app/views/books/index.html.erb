@@ -3,9 +3,40 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: inline-block">
-			<a href="#" class="btn btn-primary btn-sm" style="margin-top: 1em; margin-bottom: 1em"><span class="glyphicon glyphicon-plus"></span> Add New Book</a>
+			<a href="/books/new" class="btn btn-primary btn-sm" style="margin-top: 1em; margin-bottom: 1em"><span class="glyphicon glyphicon-plus"></span> Add New Book</a>
 		</div>
 	</div>
 	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: inline-block">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Summary</th>
+						<th>Status</th>
+						<th>Borrower</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @books.each do |book| %>
+					<tr>
+						<td><%= book.title %></td>
+						<td><%= book.author %></td>
+						<td><%= book.summary %></td>
+						<td><%= book.status %></td>
+						<td><%= book.borrower %></td>
+						<td>
+							<a href="/books/new" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>
+							<a href="/books/new" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></a>
+						</td>
+					</tr>
+				<% end %>	
+				</tbody>
+			</table>
+			
+			<%= paginate @books, :theme => 'twitter-bootstrap-3' %>
+		</div>
 	</div>
 </div>
